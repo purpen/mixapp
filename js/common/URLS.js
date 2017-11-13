@@ -5,3 +5,4 @@
     export const INDEX_PRODUCTS_LIST=BASE_URL+"product/getlist";
     export const INDEX_CATEGORY_URL=BASE_URL+"gateway/find";
     export const INDEX_LOCALGUIDE_URL=BASE_URL+"scene_subject/getlist";
+    export const PRODUCT_DETAIL_URL=BASE_URL+"product/view";
