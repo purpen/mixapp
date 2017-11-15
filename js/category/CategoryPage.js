@@ -57,7 +57,6 @@ export default class CategoryPage extends Component {
         fetch(INDEX_CATEGORY_URL).then((response) => response.json()).then((jsonResponse) => {
             let items=jsonResponse.data.pro_category;
             if (items.length==0) {
-                alert('暂无内容');
                 this.setState({
                     empty:true
                 });
@@ -160,7 +159,8 @@ export default class CategoryPage extends Component {
     }
 
     _onPressItem(item) {
-        alert(item.title);
+        const {navigate} = this.props.navigation;
+        navigate('ScreenOut',item);
     }
 }
 
