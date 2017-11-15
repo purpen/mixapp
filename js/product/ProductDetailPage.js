@@ -1,17 +1,19 @@
 import React, {Component} from 'react'
-import {StyleSheet, View, Text, Image, ActivityIndicator,Platform,TouchableOpacity,StatusBar,FlatList} from 'react-native'
+import {StyleSheet, View, Text, Image, ActivityIndicator,Platform,TouchableOpacity,StatusBar,WebView} from 'react-native'
 import NavigationBar from '../common/NavigationBar'
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view'
 import ViewUtil from "../common/ViewUtil";
 import ProductsIntroduction from "./ProductsIntroduction";
 import {PRODUCT_DETAIL_URL} from "../common/URLS";
 import {height, width} from "../common/Constants";
+import ProductsComments from "./ProductsComments";
 
 const tabNames = ['商品', '详情', '评价'];
 export default class ProductDetailPage extends Component {
     state = {
         isLoading: true,
         productInfo: null,
+        message:null
     }
 
     render() {
@@ -34,28 +36,37 @@ export default class ProductDetailPage extends Component {
             }}/>}
             initialPage={0}
         >
+
             {this._getTabContent(item)}
         </ScrollableTabView>);
+
         return (
             <View style={styles.container}>
                 {navigationBar}
                 {content}
-                <View style={{position:'absolute',top:Platform.OS==='ios'?height-44:height-44-StatusBar.currentHeight,height:44,width:width,flex:1,flexDirection:'row'}}>
-                    <TouchableOpacity activeOpacity={0.7} style={{flex:1,flexDirection:'row',height:44,alignItems:'center',justifyContent:'center'}}>
-                        <Image source={require('../../res/imgs/icon_unfavorite.png')} style={{width:15,height:15}}/>
-                        <Text style={styles.share_favorite}>收藏</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.7} style={{flex:1,fontSize:14,color:'#666',flexDirection:'row',height:44,alignItems:'center',justifyContent:'center'}}>
-                        <Image source={require('../../res/imgs/icon_share.png')} style={{width:15,height:15,resizeMode:'contain'}}/>
-                        <Text style={styles.share_favorite}>分享</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.7} style={{paddingLeft:15,paddingRight:15,height:44,backgroundColor:"#9A7D56",alignItems:'center',justifyContent:'center'}}>
-                        <Text style={{color:'white',fontSize:17}}>加入购物车</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.7} style={{paddingLeft:15,paddingRight:15,height:44,backgroundColor:"#222",alignItems:'center',justifyContent:'center'}}>
-                        <Text style={{color:'white',fontSize:17}}>立即购买</Text>
-                    </TouchableOpacity>
-                </View>
+                {this._bottomBar()}
+            </View>
+        );
+    }
+
+    _bottomBar(){
+        if (this.state.message) return <Text style={{alignSelf:'center',color:'#666',fontSize:14,marginTop:80}}>{this.state.message}</Text>;
+        return (
+            <View style={styles.bottomBar}>
+                <TouchableOpacity activeOpacity={0.7} style={styles.share_favorite_container}>
+                    <Image source={require('../../res/imgs/icon_unfavorite.png')} style={{width:15,height:15}}/>
+                    <Text style={styles.share_favorite}>收藏</Text>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.7} style={styles.share_favorite_container}>
+                    <Image source={require('../../res/imgs/icon_share.png')} style={{width:15,height:15,resizeMode:'contain'}}/>
+                    <Text style={styles.share_favorite}>分享</Text>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.7} style={{paddingLeft:15,paddingRight:15,height:44,backgroundColor:"#9A7D56",alignItems:'center',justifyContent:'center'}}>
+                    <Text style={{color:'white',fontSize:17}}>加入购物车</Text>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.7} style={{paddingLeft:15,paddingRight:15,height:44,backgroundColor:"#222",alignItems:'center',justifyContent:'center'}}>
+                    <Text style={{color:'white',fontSize:17}}>立即购买</Text>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -69,6 +80,14 @@ export default class ProductDetailPage extends Component {
         fetch(request)
             .then((response) => response.json())
             .then((responseJson) => {
+                if (!responseJson.success){
+                    this.setState({
+                        isLoading: false,
+                        message: responseJson.message,
+                        productInfo:null
+                    });
+                    return;
+                }
                 let data = responseJson.data;
                 this.setState({
                     isLoading: false,
@@ -84,18 +103,20 @@ export default class ProductDetailPage extends Component {
     }
 
     _getTabContent(item) {
+        if (item===null) return <Text style={{width:width,alignSelf:'center',fontSize:14,color:'#666'}}>{this.state.message}</Text>;
         return tabNames.map((value, i) => {
             switch (i) {
                 case 0:
                     return <ProductsIntroduction productInfo={item} tabLabel={value} key={i}/>
                     break;
                 case 1:
-                    return <Text style={{fontSize: 14, color: '#222'}} tabLabel={value}
-                                 key={i}>{value}</Text>
+                    return <WebView source={{uri: item.content_view_url}} scalesPageToFit={true} javaScriptEnabled={true}
+                                    domStorageEnabled={true} tabLabel={value}
+                                 key={i}/>
                     break;
                 case 2:
-                    return <Text style={{fontSize: 14, color: '#222'}} tabLabel={value}
-                                 key={i}>{value}</Text>
+                    return <ProductsComments style={{fontSize: 14, color: '#222'}} tabLabel={value}
+                                             key={i} id={item._id.toString()}/>
                     break;
                 default:
                     return <Text style={{fontSize: 14, color: '#222'}} tabLabel={value}
@@ -112,9 +133,25 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white'
     },
+    share_favorite_container:{
+        flex:1,
+        flexDirection:'row',
+        height:44,
+        alignItems:'center',
+        justifyContent:'center'
+    },
     share_favorite:{
         fontSize:14,
         color:'#666',
-        marginLeft:5,
+        marginLeft:2,
+    },
+    bottomBar:{
+        backgroundColor:'white',
+        position:'absolute',
+        top:Platform.OS==='ios'?height-44:height-44-StatusBar.currentHeight,
+        height:44,
+        width:width,
+        flex:1,
+        flexDirection:'row'
     }
 });

@@ -3,7 +3,6 @@ import {StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity,Butto
 import Swiper from 'react-native-swiper'
 import PropTypes from 'prop-types'
 import {height, width} from "../common/Constants";
-import NavigationBar from "../common/NavigationBar";
 
 export default class ProductsIntroduction extends Component {
 
