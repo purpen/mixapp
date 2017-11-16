@@ -27,19 +27,21 @@ export default class ProductDetailPage extends Component {
             hide={false}/>;
 
         let item = this.state.productInfo;
-        let content = item === null ? <ActivityIndicator/> : (<ScrollableTabView
-            renderTabBar={(tabBarProps) => <ScrollableTabBar {...tabBarProps} activeTextColor="#9A7D56"
-                                                             inactiveTextColor="#2A2A2A"
-                                                             style={{height: 44}} underlineStyle={{
-                height: 2,
-                backgroundColor: "#9A7D56"
-            }}/>}
-            initialPage={0}
-        >
+        let content=null;
+        if (!this.state.message){
+            content = item === null ? <ActivityIndicator/> : (<ScrollableTabView
+                renderTabBar={(tabBarProps) => <ScrollableTabBar {...tabBarProps} activeTextColor="#9A7D56"
+                                                                 inactiveTextColor="#2A2A2A"
+                                                                 style={{height: 44}} underlineStyle={{
+                    height: 2,
+                    backgroundColor: "#9A7D56"
+                }}/>}
+                initialPage={0}
+            >
 
-            {this._getTabContent(item)}
-        </ScrollableTabView>);
-
+                {this._getTabContent(item)}
+            </ScrollableTabView>);
+        }
         return (
             <View style={styles.container}>
                 {navigationBar}
