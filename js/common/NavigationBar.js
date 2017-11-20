@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
+import {ViewPropTypes}from 'react-native'
 import PropTypes from 'prop-types'
 import {width} from "./Constants";
 import {
     StyleSheet,
-    Navigator,
     Platform,
     TouchableOpacity,
-    Image,
     StatusBar,
     Text,
     View
@@ -33,8 +32,8 @@ const StatusBarShape = {
 
 export default class NavigationBar extends Component {
     static propTypes = {
-        style: View.propTypes.style,
-        titleLayoutStyle:View.propTypes.style,
+        style: ViewPropTypes.style,
+        titleLayoutStyle:ViewPropTypes.style,
         navigator: PropTypes.object,
         leftButtonTitle: PropTypes.string,
         popEnabled: PropTypes.bool,

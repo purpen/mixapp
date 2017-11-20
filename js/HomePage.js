@@ -36,6 +36,7 @@ export default class HomePage extends Component {
         this.timer && clearTimeout(this.timer);
     }
 
+
     render() {
         return (
             <TabNavigator style={styles.container}>
