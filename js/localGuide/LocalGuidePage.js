@@ -51,8 +51,7 @@ export default class LocalGuidePage extends Component {
     }
 
     _onItemClick(item) {
-        const {navigate} = this.props.navigation;
-        navigate('SubjectDetail',item);
+        this.props.navigation.navigate('SubjectDetail',item);
     }
 
 
@@ -65,7 +64,7 @@ export default class LocalGuidePage extends Component {
     // }
 
     _onProductClick(item) {
-        alert(item.title)
+        this.props.navigation.navigate('ProductDetail',item);
     }
 
     componentDidMount() {

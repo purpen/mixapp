@@ -20,7 +20,7 @@ export default class ViewItemWithTitle extends Component {
 
     render() {
         let iconLeft=this.props.iconLeft?<Image source={this.props.iconLeft} style={{resizeMode: 'center', height: 30, width: 30, marginRight: 5}}/>:null;
-        let rightArrow=this.props.showArrowRight? <Image source={require('../../res/imgs/icon_arrow_right.png')} style={{resizeMode: 'center'}}/>:null;
+        let rightArrow=this.props.showArrowRight? <Image source={require('../../res/imgs/icon_arrow_right.png')} style={{resizeMode: 'contain',width:6,height:12}}/>:null;
         let tips=this.props.tips?<Text style={{fontSize: 12,color:this.props.tipsColor,marginRight:5}}>{this.props.tips}</Text>:null;
         return (
             <TouchableOpacity activeOpacity={0.7} onPress={this._onClick.bind(this)}>

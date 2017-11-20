@@ -1,15 +1,12 @@
 import React, {Component} from 'react'
 import {StyleSheet, Image, InteractionManager} from 'react-native'
 import TabNavigator from 'react-native-tab-navigator';
-import {StackNavigator} from 'react-navigation'
 import IndexPage from './index/IndexPage'
 import CategoryPage from './category/CategoryPage'
 import LocalGuidePage from './localGuide/LocalGuidePage'
 import ShopCartPage from './shopCart/ShopCartPage'
 import PersonalCenterPage from './personalCenter/PersonalCenterPage'
 import SplashScreen from 'react-native-splash-screen'
-import SubjectDetailPage from "./localGuide/SubjectDetailPage";
-import ProductDetailPage from "./product/ProductDetailPage";
 
 export const TAB = {
     index: '首页', category: '分类', localGuide: '本地指南', shopCart: '购物车', personalCenter: '个人'
@@ -50,6 +47,8 @@ export default class HomePage extends Component {
     }
 
     _renderTabItem(Component, title, selectedTab, renderIcon, renderSelectedIcon) {
+
+
         return <TabNavigator.Item
             selected={this.state.selectedTab === selectedTab}
             title={title}
@@ -58,33 +57,20 @@ export default class HomePage extends Component {
             renderIcon={() => <Image style={styles.tabIconStyle}
                                      source={renderIcon}/>}
             renderSelectedIcon={() => <Image style={styles.tabIconStyle} source={renderSelectedIcon}/>}
-            onPress={() => this.setState({selectedTab: selectedTab})}>
+            onPress={() => this._setSelectedItem(selectedTab)}>
             <Component {...this.props}/>
         </TabNavigator.Item>
     }
+
+    _setSelectedItem(selectedTab) {
+        if (selectedTab === TAB.personalCenter && true) {
+            this.props.navigation.navigate('LoginRegister');
+        } else {
+            this.setState({selectedTab: selectedTab})
+        }
+    }
 }
 
-// export const D3IN = StackNavigator({
-//     Home: {
-//         screen: HomePage,
-//         navigationOptions: {
-//             // headerLeft: null
-//             // headerTitle:"首页",
-//
-//         }
-//     },
-//     SubjectDetail:{
-//         screen:SubjectDetailPage,
-//     },
-//     ProductDetail:{
-//         screen:ProductDetailPage,
-//     }
-// }, {
-//     headerMode: 'none',
-//     headerTitleStyle: {
-//         alignSelf: 'center'
-//     }
-// });
 
 let styles = StyleSheet.create({
     container: {
