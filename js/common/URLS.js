@@ -7,3 +7,4 @@
     export const INDEX_LOCALGUIDE_URL=BASE_URL+"scene_subject/getlist";
     export const PRODUCT_DETAIL_URL=BASE_URL+"product/view";
     export const PRODUCT_COMMENTS_URL=BASE_URL+"comment/getlist";
+    export const USER_LOGIN_URL=BASE_URL+"auth/login";

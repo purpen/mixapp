@@ -47,8 +47,6 @@ export default class HomePage extends Component {
     }
 
     _renderTabItem(Component, title, selectedTab, renderIcon, renderSelectedIcon) {
-
-
         return <TabNavigator.Item
             selected={this.state.selectedTab === selectedTab}
             title={title}
