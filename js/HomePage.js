@@ -7,6 +7,7 @@ import LocalGuidePage from './localGuide/LocalGuidePage'
 import ShopCartPage from './shopCart/ShopCartPage'
 import PersonalCenterPage from './personalCenter/PersonalCenterPage'
 import SplashScreen from 'react-native-splash-screen'
+import LoginUtil from "./common/LoginUtil";
 
 export const TAB = {
     index: '首页', category: '分类', localGuide: '本地指南', shopCart: '购物车', personalCenter: '个人'
@@ -18,7 +19,7 @@ export default class HomePage extends Component {
     }
 
     state = {
-        selectedTab: TAB.index
+        selectedTab: TAB.index,
     };
 
     componentDidMount() {
@@ -61,12 +62,21 @@ export default class HomePage extends Component {
     }
 
     _setSelectedItem(selectedTab) {
-        if (selectedTab === TAB.personalCenter && true) {
-            this.props.navigation.navigate('LoginRegister');
-        } else {
+        if (selectedTab === TAB.personalCenter || selectedTab===TAB.shopCart){
+            LoginUtil.isLogin().then(ret => {
+                this.setState({selectedTab: selectedTab})
+            }).catch(err => {
+                this.props.navigation.navigate('LoginRegister');
+            })
+        }else {
             this.setState({selectedTab: selectedTab})
         }
     }
+
+    componentWillReceiveProps(nextProps){
+        console.log(nextProps)
+    }
+
 }
 
 

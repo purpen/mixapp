@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, Image} from 'react-native'
+import {TouchableOpacity, Image,Text} from 'react-native'
 
 export default class ViewUtil {
     static getLeftButton(callBack) {
@@ -11,4 +11,5 @@ export default class ViewUtil {
                 source={require('../../res/imgs/back_black.png')}/>
         </TouchableOpacity>
     }
+
 }

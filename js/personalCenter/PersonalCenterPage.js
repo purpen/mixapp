@@ -36,7 +36,14 @@ export default class PersonalCenterPage extends Component {
     }
 
     _onClick(title) {
-        alert(title)
+        switch (title){
+            case 'setting':
+                this.props.navigation.navigate('SystemSettings');
+                break;
+            default:
+                alert(title);
+                break;
+        }
     }
 
     _renderSaleStateItems() {

@@ -7,7 +7,8 @@ import {INDEX_CATEGORY_URL} from "../common/URLS";
 
 const titles = ['推荐', '先锋智能', '数码电子', '户外出行', '运动健康', '文创文品', '先锋设计', '家具日用', '厨房卫浴', '母婴成长', '品质饮品'];
 
-function TitleModel(title, isSelected) {
+function TitleModel(index,title, isSelected) {
+    this.index=index;
     this.title = title;
     this.isSelected = isSelected;
 }
@@ -130,20 +131,22 @@ export default class CategoryPage extends Component {
     }
 
     _onPress = (item) => {
-        let index = this.state.currentIndex;
-        this.state.items.map((titleItem, i) => {
-            if (item.title === titleItem.title) {
-                index = i;
-                titleItem.isSelected = true;
-            } else {
-                titleItem.isSelected = false;
-            }
+        this.state.items[this.state.currentIndex].isSelected=false;
+        this.state.items[item.index].isSelected=true;
 
-        });
+        // this.state.items.map((titleItem, i) => {
+        //     if (item.title === titleItem.title) {
+        //         index = i;
+        //         titleItem.isSelected = true;
+        //     } else {
+        //         titleItem.isSelected = false;
+        //     }
+        //
+        // });
 
         this.setState({
-            currentIndex: index,
-            items: Object.assign([], this.state.items)
+            currentIndex: item.index,
+            items: Object.assign([], this.state.items),
         });
     }
 
@@ -151,7 +154,7 @@ export default class CategoryPage extends Component {
         let titleItems = [];
         titles.map((title, i) => {
             let isSelected = (i === 0);
-            titleItems.push(new TitleModel(title, isSelected));
+            titleItems.push(new TitleModel(i,title, isSelected));
         });
         this.setState({
             items: titleItems

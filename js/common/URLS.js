@@ -8,3 +8,6 @@
     export const PRODUCT_DETAIL_URL=BASE_URL+"product/view";
     export const PRODUCT_COMMENTS_URL=BASE_URL+"comment/getlist";
     export const USER_LOGIN_URL=BASE_URL+"auth/login";
+    export const USER_REGISTER_URL=BASE_URL+"auth/register";
+    export const AUTH_VERIFY_CODE_URL=BASE_URL+"auth/verify_code";
+    export const SHOP_CART_URL=BASE_URL+"shopping/fetch_cart";

@@ -5,6 +5,7 @@ import SubjectDetailPage from "./localGuide/SubjectDetailPage";
 import ProductDetailPage from "./product/ProductDetailPage";
 import {ScreenOutDrawer} from "./category/ScreenOutDrawer";
 import LoginRegisterPage from "./loginRegister/LoginRegisterPage";
+import SystemSettingsPage from './personalCenter/SystemSettingsPage'
 export const D3IN = StackNavigator({
     Home: {
         screen: HomePage,
@@ -23,6 +24,9 @@ export const D3IN = StackNavigator({
     },
     LoginRegister:{
         screen:LoginRegisterPage,
+    },
+    SystemSettings:{
+        screen:SystemSettingsPage,
     }
 }, {
     headerMode: 'none',

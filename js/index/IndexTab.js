@@ -69,8 +69,7 @@ export default class IndexTab extends Component {
     }
 
     _onItemClick(item){
-      const {navigate}=this.props.navigation;
-      navigate('ProductDetail',item);
+        this.props.navigation.navigate('ProductDetail',item);
     }
 
     _loadMore = () => {

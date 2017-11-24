@@ -23,8 +23,8 @@ export default class ViewItemWithTitle extends Component {
         let rightArrow=this.props.showArrowRight? <Image source={require('../../res/imgs/icon_arrow_right.png')} style={{resizeMode: 'contain',width:6,height:12}}/>:null;
         let tips=this.props.tips?<Text style={{fontSize: 12,color:this.props.tipsColor,marginRight:5}}>{this.props.tips}</Text>:null;
         return (
-            <TouchableOpacity activeOpacity={0.7} onPress={this._onClick.bind(this)}>
-                <View style={styles.container}>
+            <TouchableOpacity activeOpacity={0.7} onPress={this._onClick.bind(this)} style={styles.container}>
+                <View style={styles.item_container}>
                     {iconLeft}
                     <Text style={{fontSize: 14, color: '#222'}}>{this.props.title}</Text>
                     <View style={styles.container_right}>
@@ -44,22 +44,23 @@ export default class ViewItemWithTitle extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'row',
-        height: 44,
-        paddingLeft: 15,
-        paddingRight: 15,
-        width: width,
-        alignItems: 'center',
+    container:{
+        flex:1,
         backgroundColor: 'white'
     },
-    container_right: {
-        flex: 1,
+    item_container: {
+        height:44,
         flexDirection: 'row',
-        height: 44,
+        paddingLeft: 15,
+        paddingRight: 15,
         alignItems: 'center',
-        justifyContent: 'flex-end'
+    },
+    container_right: {
+        flex:1,
+        height:44,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
     }
 
 });

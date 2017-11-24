@@ -4,11 +4,12 @@ import MD5Util from './MD5Util'
 import {Map} from "./ParamsUtil";
 
 export default class HttpUtil{
-    static getData(method:string,url:string,params){
+    static getData(method:string,url:string,params:Array){
         return new Promise(function (resolve,reject) {
             let headers = new Headers();
             headers.append('Content-Type', 'application/x-www-form-urlencoded');
-            let request = new Request(url, {method: method, headers: headers, body: HttpUtil.requestBodyString(params)});
+            let body=HttpUtil.requestBodyString(params)
+            let request = new Request(url, {method: method, headers: headers, body: body});
             fetch(request)
                 .then((response) => response.json())
                 .then((responseJson) => {
@@ -30,7 +31,8 @@ export default class HttpUtil{
          finalParams.push(new Map("uuid", Platform.OS === 'ios' ? DeviceInfo.getUniqueID() : DeviceInfo.getSerialNumber()));
          finalParams.push(new Map("channel", "10"));
          finalParams.push(new Map("time", new Date().getTime().toString()));
-         finalParams.push(new Map("sign", this.getSignedString(params)));
+         finalParams.push(new Map("sign",this.getSignedString(params)));
+         for (let item of params) finalParams.push(item);
          return this.jointString(finalParams);
      }
 
