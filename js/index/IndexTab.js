@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity, FlatList, View, Text, Image} from 'react-native'
 import IndexChoiceGoodList from "./IndexChoiceGoodList";
-import {INDEX_PRODUCTS_LIST} from '../common/URLS'
-import {SIZE} from "../common/Constants";
-
+import {ToastConfig} from "../common/Constants";
+import ParamsUtil from "../network/ParamsUtil";
+import AppService from "../common/AppService";
+import Toast from 'react-native-root-toast'
 const {width} = Dimensions.get('window');
 const imgItem = (width - 34) / 2;
 export default class IndexTab extends Component {
@@ -30,7 +31,7 @@ export default class IndexTab extends Component {
                 renderItem={this._renderItem}
                 data={this.state.list}
                 numColumns={2}
-                refreshing={false}
+                refreshing={this.state.isLoading}
                 onEndReachedThreshold={0.1}
                 onRefresh={this._refresh}
                 onEndReached={this._loadMore}
@@ -92,15 +93,12 @@ export default class IndexTab extends Component {
     }
 
     _fetchData() {
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        let body = 'page=' + this.state.currentPage + '&size=' + SIZE + '&stick=1&stage=9';
-        // alert(body);
-        let request = new Request(INDEX_PRODUCTS_LIST, {method: 'POST', headers: headers, body: body});
-        fetch(request)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                let items = responseJson.data.rows;
+        let stick='1';
+        let stage='9';
+        let params = ParamsUtil.generateIndexTabParams(this.state.currentPage,stick,stage);
+        AppService.getIndexTabData(params).then((response) => {
+            if (response.success) {
+                let items = response.data.rows;
                 if (items.length == 0) {
                     this.setState({
                         isLoading: false,
@@ -119,13 +117,16 @@ export default class IndexTab extends Component {
                     list: this.state.list.concat(items),
                     currentPage: ++this.state.currentPage,
                 });
-            }).catch((error) => {
+            }
+        }).catch((error) => {
+            console.log('getIndexTabData:' + error)
             this.setState({
                 isLoading: false,
                 error: true,
                 errorInfo: error.toString(),
             });
-        })
+            Toast.show('网络异常', ToastConfig);
+        });
     }
 }
 const styles = StyleSheet.create({

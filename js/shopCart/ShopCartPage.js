@@ -89,7 +89,7 @@ export default class ShopCart extends Component {
                     ListHeaderComponent={this._headerComponent}
                     renderItem={this._renderItem}
                     data={this.state.items}
-                    refreshing={true}
+                    refreshing={this.state.isLoading}
                 />
                 {this.state.isEdit ? editStateBottom : normalStateBottom}
             </View>

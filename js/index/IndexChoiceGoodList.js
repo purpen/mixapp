@@ -2,12 +2,15 @@ import React, {Component} from 'react'
 import {StyleSheet, View, Image, Text,TouchableOpacity,FlatList, Dimensions} from 'react-native'
 import {INDEX_CHOICE_GOODS_URL} from '../common/URLS'
 import PropTypes from 'prop-types';
-
+import Toast from 'react-native-root-toast';
+import {ToastConfig} from "../common/Constants";
+import ParamsUtil from "../network/ParamsUtil";
+import AppService from "../common/AppService";
 const {width} = Dimensions.get('window');
 const imgItem = (width - 34) / 2;
 export default class IndexChoiceGoodList extends Component {
     state = {
-        isRefreshing: false,
+        isRefreshing: true,
         error: false,
         items: [],
     }
@@ -88,10 +91,10 @@ export default class IndexChoiceGoodList extends Component {
     }
 
     _fetchData() {
-        fetch(INDEX_CHOICE_GOODS_URL)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                let data = responseJson.data.items;
+        let params = ParamsUtil.generateChoiceGoodsParams();
+        AppService.getChoiceGoodsData(params).then((response) => {
+            if (response.success) {
+                let data = response.data.items;
 
                 if (this.state.isRefreshing) {
                     this.state.items.length = 0;
@@ -103,13 +106,16 @@ export default class IndexChoiceGoodList extends Component {
                     isLoading: false,
                     error: false,
                 });
-            }).catch((error) => {
+            }
+        }).catch((error) => {
+            console.log('getChoiceGoodsData:' + error)
             this.setState({
                 isLoading: false,
                 error: true,
                 errorInfo: error.toString(),
             });
-        })
+            Toast.show('网络异常', ToastConfig);
+        });
     }
 
     componentWillReceiveProps(nextProps) {

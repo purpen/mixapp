@@ -2,9 +2,11 @@ import React, {Component} from 'react'
 import {StyleSheet, View, Text, Image, TouchableOpacity, FlatList} from 'react-native'
 import NavigationBar from '../common/NavigationBar'
 import {TAB} from '../HomePage'
-import {height, width} from "../common/Constants";
+import {height, ToastConfig, width} from "../common/Constants";
 import {INDEX_CATEGORY_URL} from "../common/URLS";
-
+import Toast from 'react-native-root-toast'
+import ParamsUtil from "../network/ParamsUtil";
+import AppService from "../common/AppService";
 const titles = ['推荐', '先锋智能', '数码电子', '户外出行', '运动健康', '文创文品', '先锋设计', '家具日用', '厨房卫浴', '母婴成长', '品质饮品'];
 
 function TitleModel(index,title, isSelected) {
@@ -55,30 +57,40 @@ export default class CategoryPage extends Component {
 
     componentDidMount() {
         this._getTitles();
-        fetch(INDEX_CATEGORY_URL).then((response) => response.json()).then((jsonResponse) => {
-            let items=jsonResponse.data.pro_category;
-            if (items.length==0) {
-                this.setState({
-                    empty:true
-                });
-                return;
-            }
-            let i=0;
-            items.map((item)=>{
-                items[i]={index:i,item:item};
-                i++;
-            })
 
-            this.setState({
-                contentItems:this.state.contentItems.concat(items),
-                error:false
-            });
+        this._getCategoryData();
+    }
+
+    _getCategoryData() {
+        let params = ParamsUtil.generateCategoryParams();
+        AppService.getCategoryData(params).then((response) => {
+            if (response.success) {
+                let items = response.data.pro_category;
+                if (items.length == 0) {
+                    this.setState({
+                        empty: true
+                    });
+                    return;
+                }
+                let i = 0;
+                items.map((item) => {
+                    items[i] = {index: i, item: item};
+                    i++;
+                })
+
+                this.setState({
+                    contentItems: this.state.contentItems.concat(items),
+                    error: false
+                });
+            }
         }).catch((error) => {
+            console.log('getChoiceGoodsData:' + error)
             this.setState({
-                error:true,
-                errorInfo:error.toString()
+                error: true,
+                errorInfo: error.toString()
             });
-        })
+            Toast.show('网络异常', ToastConfig);
+        });
     }
 
     _headerComponent = () => {

@@ -9,7 +9,10 @@ import {
 } from 'react-native'
 import Swiper from 'react-native-swiper'
 import {INDEX_BANNER_URL} from '../common/URLS'
-
+import Toast from 'react-native-root-toast';
+import {ToastConfig} from "../common/Constants";
+import ParamsUtil from "../network/ParamsUtil";
+import AppService from "../common/AppService";
 const {width} = Dimensions.get('window')
 const styles = {
     container: {
@@ -94,17 +97,22 @@ export default class IndexHeaderView extends Component {
     }
 
     _fetchData() {
-        fetch(INDEX_BANNER_URL).then((response) => response.json()).then((responseJson) => {
-            let banners = responseJson.data.rows;
-            this.setState({
-                isLoading: false,
-                banners: banners,
-            });
+        let params = ParamsUtil.generateIndexBannerParams();
+        AppService.getIndexBannerData(params).then((response) => {
+            if (response.success) {
+                let banners = response.data.rows;
+                this.setState({
+                    isLoading: false,
+                    banners: banners,
+                });
+            }
         }).catch((error) => {
+            console.log('getIndexBannerData:' + error)
             this.setState({
                 error: true,
                 errorInfo: error.toString(),
             });
+            Toast.show('网络异常', ToastConfig);
         });
     }
 }

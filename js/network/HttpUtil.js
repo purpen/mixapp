@@ -8,8 +8,7 @@ export default class HttpUtil{
         return new Promise(function (resolve,reject) {
             let headers = new Headers();
             headers.append('Content-Type', 'application/x-www-form-urlencoded');
-            let body=HttpUtil.requestBodyString(params)
-            let request = new Request(url, {method: method, headers: headers, body: body});
+            let request = new Request(url, {method: method, headers: headers, body: HttpUtil.requestBodyString(params)});
             fetch(request)
                 .then((response) => response.json())
                 .then((responseJson) => {

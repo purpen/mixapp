@@ -1,4 +1,5 @@
 import {Platform} from 'react-native'
+import {SIZE} from "../common/Constants";
 export function Map(key, value) {
     this.key = key;
     this.value = value;
@@ -47,7 +48,41 @@ export default class ParamsUtil {
 
     static generateShopCartParams() {
         let params=[];
-        return this.sortParams(params)
+        return this.sortParams(params);
+    }
+
+    static generateIndexTabParams(currentPage, stick, stage) {
+        let params=[];
+        params.push(new Map('page',currentPage+''));
+        params.push(new Map('stick',stick));
+        params.push(new Map('stage',stage));
+        params.push(new Map('size',SIZE));
+        return this.sortParams(params);
+    }
+
+    static generateChoiceGoodsParams() {
+        let params=[];
+        return this.sortParams(params);
+    }
+
+    static generateCategoryParams() {
+        let params=[];
+        return this.sortParams(params);
+    }
+
+    static generateLocalGuideParams(currentPage, stick, sort, type) {
+        let params=[];
+        params.push(new Map('page',currentPage+''));
+        params.push(new Map('stick',stick));
+        params.push(new Map('sort',sort));
+        params.push(new Map('type',type));
+        params.push(new Map('size',SIZE));
+        return this.sortParams(params);
+    }
+
+    static generateIndexBannerParams() {
+        let params=[];
+        return this.sortParams(params);
     }
 }
 

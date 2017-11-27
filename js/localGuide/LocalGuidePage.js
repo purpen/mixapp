@@ -4,6 +4,10 @@ import NavigationBar from '../common/NavigationBar'
 import {TAB} from "../HomePage";
 import {SIZE, width} from "../common/Constants";
 import {INDEX_LOCALGUIDE_URL} from "../common/URLS";
+import Toast from 'react-native-root-toast';
+import {ToastConfig} from "../common/Constants";
+import ParamsUtil from "../network/ParamsUtil";
+import AppService from "../common/AppService";
 
 export default class LocalGuidePage extends Component {
     state = {
@@ -72,14 +76,13 @@ export default class LocalGuidePage extends Component {
     }
 
     _fetchData() {
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        let body = 'page=' + this.state.currentPage + '&size=' + SIZE + '&stick=1&sort=1&type=5';
-        let request = new Request(INDEX_LOCALGUIDE_URL, {method: 'POST', headers: headers, body: body});
-        fetch(request)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                let items = responseJson.data.rows;
+        let stick='1';
+        let sort='1';
+        let type='5';
+        let params = ParamsUtil.generateLocalGuideParams(this.state.currentPage,stick,sort,type);
+        AppService.getLocalGuideData(params).then((response) => {
+            if (response.success) {
+                let items = response.data.rows;
                 if (items.length == 0) {
                     this.setState({
                         isLoading: false,
@@ -99,13 +102,16 @@ export default class LocalGuidePage extends Component {
                     list: this.state.list.concat(items),
                     currentPage: ++this.state.currentPage,
                 });
-            }).catch((error) => {
+            }
+        }).catch((error) => {
+            console.log('getLocalGuideData:' + error)
             this.setState({
                 isLoading: false,
                 error: true,
                 errorInfo: error.toString(),
             });
-        })
+            Toast.show('网络异常', ToastConfig);
+        });
     }
 
 }
